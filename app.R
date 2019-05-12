@@ -72,6 +72,19 @@ server <- function(input, output) {
         
     })
     
+    output$map <- renderLeaflet({ 
+        
+       world %>%
+            subset(world@data$geounit == input$country) %>%
+            leaflet() %>%
+            addTiles() %>%
+            addPolygons(highlightOptions = highlightOptions(color = "white", weight = 2,
+                                           bringToFront = TRUE), label= ~as.character(geounit))
+                         
+        
+        
+        })
+    
     
 }
 
