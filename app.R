@@ -59,7 +59,7 @@ ui <- fluidPage(
     leafletOutput("map")
 )
 
-# Define server logic to plot various variables against mpg ----
+# Set up server
 server <- function(input, output) {
     output$plot <- renderPlot ({
         
