@@ -67,7 +67,7 @@ server <- function(input, output) {
             subset(Origin == input$country) %>%
             subset(select = "val") %>%
             ts(frequency = 12, start = c(1999,1), end = c(2018,1)) %>%
-            autoplot()
+            autoplot(xlab= "Year", ylab = "Number of Refugees")
         
         
     })
@@ -75,11 +75,13 @@ server <- function(input, output) {
     output$map <- renderLeaflet({ 
         
        world %>%
-            subset(world@data$geounit == input$country) %>%
+            subset(world@data$name_long == input$country) %>%
             leaflet() %>%
             addTiles() %>%
             addPolygons(highlightOptions = highlightOptions(color = "white", weight = 2,
-                                           bringToFront = TRUE), label= ~as.character(geounit))
+                                           bringToFront = TRUE), 
+                        label= ~as.character(paste(geounit, "-", "GDP:", gdp_md_est, "Population:", 
+                                                   pop_est, sep = " ")))
                          
         
         
