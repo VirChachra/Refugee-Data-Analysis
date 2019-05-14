@@ -1,7 +1,6 @@
 library(tidyverse)
 library(ggplot2)
 library(shiny)
-library(plyr)
 library(purrr)
 library(zoo)
 library(timeSeries)
@@ -55,6 +54,16 @@ ui <- fluidPage(
     # Plot
     plotOutput("plot"),
     
+    sliderInput("time",
+                "Years", 
+                min = min(asylum_seekers_monthly$Date),
+                max = max(asylum_seekers_monthly$Date), 
+                value = asylum_seekers_monthly$Date,
+                animate = animationOptions(interval = 10),
+                dragRange = FALSE),
+    
+    plotOutput("timeplot"),
+    
     # Map
     leafletOutput("map")
 )
@@ -71,6 +80,13 @@ server <- function(input, output) {
         
         
     })
+    output$timeplot <- renderPlot ({
+        asylum_seekers_monthly %>%
+            subset(Date == input$time) %>%
+            ggplot(aes(x = Date, y = val, color = ~Origin)) + geom_point()
+        
+        
+        })
     
     output$map <- renderLeaflet({ 
         
